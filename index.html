@@ -1,1 +1,216 @@
 
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GLOBISHOP — Boutique mondiale</title>
+<style>
+:root{--green:#087443;--gold:#d6a52a;--ink:#18352a;--bg:#f5f8f5}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:var(--green);color:white;padding:18px 5%;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.logo{font-size:25px;font-weight:800;letter-spacing:1px}.gold{color:#ffd66b}
+nav{display:flex;gap:8px;align-items:center;flex-wrap:wrap}button,.btn{border:0;border-radius:8px;padding:11px 15px;background:var(--gold);color:#17251d;font-weight:bold;cursor:pointer}
+button.secondary{background:#e7eee9}input,select,textarea{width:100%;padding:12px;border:1px solid #cbd8cf;border-radius:8px;margin:6px 0 12px;font:inherit}
+main{max-width:1100px;margin:24px auto;padding:0 16px}.hero{background:linear-gradient(120deg,#075c39,#128453);color:white;padding:28px;border-radius:16px}
+.hero h1{margin-top:0;font-size:clamp(26px,5vw,42px)}.search{display:flex;gap:8px}.search input{margin:0;background:white}
+section.panel{background:white;padding:18px;border-radius:14px;margin:18px 0;box-shadow:0 2px 12px #1232}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}.product{border:1px solid #e0e9e2;border-radius:12px;padding:12px}.product img{width:100%;height:150px;object-fit:cover;border-radius:8px;background:#eef3ef}.price{font-weight:bold;color:var(--green);font-size:18px}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.muted{color:#60736a;font-size:14px}.hidden{display:none!important}.notice{padding:12px;border-radius:8px;background:#fff5d9;margin:12px 0}
+footer{text-align:center;padding:28px;color:#60736a}h2{color:var(--green)}
+@media(max-width:600px){header{align-items:flex-start}.search{display:block}.search button{width:100%;margin-top:8px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">🌍 GLOBI<span class="gold">SHOP</span></div>
+  <nav>
+    <select id="language" aria-label="Langue"><option value="fr">Français</option><option value="en">English</option><option value="es">Español</option><option value="pt">Português</option><option value="de">Deutsch</option><option value="ar">العربية</option><option value="zh-CN">中文</option><option value="hi">हिन्दी</option><option value="sw">Kiswahili</option></select>
+    <button class="secondary" id="cartButton">🛒 Panier (<span id="cartCount">0</span>)</button>
+    <button id="accountButton">Connexion</button>
+  </nav>
+</header>
+<main>
+  <div class="hero">
+    <h1>Bienvenue sur GLOBISHOP</h1>
+    <p>Achetez et vendez partout dans le monde.</p>
+    <div class="search"><input id="searchInput" placeholder="Rechercher un produit..."><button id="searchButton">Rechercher</button></div>
+  </div>
+
+  <section class="panel">
+    <h2>Nos catégories</h2>
+    <p>📚 Livres numériques　🎓 Formations　👕 Mode　📱 Électronique　🏠 Maison　🛍️ Autres produits</p>
+    <p class="muted">Les vendeurs pourront proposer des produits physiques et numériques dans toutes les catégories autorisées.</p>
+  </section>
+
+  <section class="panel" id="authPanel">
+    <h2>Compte client / vendeur</h2>
+    <div class="row">
+      <div><label for="authEmail">Adresse e-mail</label><input id="authEmail" type="email" autocomplete="email" placeholder="exemple@email.com"></div>
+      <div><label for="authPassword">Mot de passe</label><input id="authPassword" type="password" autocomplete="current-password" placeholder="6 caractères minimum"></div>
+    </div>
+    <button id="signupButton">Créer un compte</button>
+    <button class="secondary" id="loginButton">Se connecter</button>
+    <button class="secondary" id="logoutButton">Déconnexion</button>
+    <p id="authStatus" class="muted">Vous n'êtes pas connecté.</p>
+  </section>
+
+  <section class="panel">
+    <h2>Publier un produit (vendeur)</h2>
+    <p class="muted">Connectez-vous avant de publier. Pour cette version de démarrage, les images et fichiers sont ajoutés par URL.</p>
+    <div class="row">
+      <div><label for="productName">Nom du produit</label><input id="productName" placeholder="Nom du produit"></div>
+      <div><label for="productPrice">Prix</label><input id="productPrice" type="number" min="0" step="0.01" placeholder="Prix"></div>
+      <div><label for="productCurrency">Devise</label><select id="productCurrency"><option>FCFA</option><option>EUR</option><option>USD</option><option>GBP</option><option>NGN</option><option>GHS</option></select></div>
+      <div><label for="productCategory">Catégorie</label><input id="productCategory" placeholder="Ex. Livres, mode, maison..."></div>
+      <div><label for="productType">Type</label><select id="productType"><option value="digital">Numérique</option><option value="physical">Physique</option></select></div>
+      <div><label for="storeName">Nom de la boutique</label><input id="storeName" placeholder="Ma boutique"></div>
+    </div>
+    <label for="productDescription">Description</label><textarea id="productDescription" rows="3" placeholder="Décrivez le produit"></textarea>
+    <label for="productImage">URL de l'image (facultatif)</label><input id="productImage" type="url" placeholder="https://...">
+    <label for="productFile">URL du fichier numérique (si produit numérique)</label><input id="productFile" type="url" placeholder="https://...">
+    <button id="publishButton">Publier le produit</button>
+    <p id="publishStatus" class="muted"></p>
+  </section>
+
+  <section class="panel">
+    <h2>Produits disponibles</h2>
+    <div id="productStatus" class="muted">Chargement des produits...</div>
+    <div id="products" class="grid"></div>
+  </section>
+
+  <section class="panel hidden" id="cartPanel">
+    <h2>Mon panier</h2><div id="cartItems"></div>
+    <div class="row">
+      <div><label for="buyerCountry">Pays de livraison (produits physiques)</label><input id="buyerCountry" placeholder="Pays"></div>
+      <div><label for="buyerAddress">Adresse de livraison</label><input id="buyerAddress" placeholder="Adresse"></div>
+    </div>
+    <label for="paymentChoice">Mode de paiement (simulation uniquement)</label>
+    <select id="paymentChoice"><option>Carte bancaire — test uniquement</option><option>Mixx by Yas — test uniquement</option><option>Moov Money — test uniquement</option></select>
+    <p class="notice">⚠️ Aucun paiement réel n'est activé. Cette version crée uniquement une commande de test sans débit d'argent.</p>
+    <button id="orderButton">Créer une commande de test</button>
+    <p id="orderStatus" class="muted"></p>
+  </section>
+  <section class="panel">
+    <h2>À propos de GLOBISHOP</h2>
+    <p>Une marketplace internationale destinée aux acheteurs et vendeurs. Les produits illégaux ou interdits ne sont pas autorisés.</p>
+    <p class="muted">Objectif commercial prévu : commission de 10 % par vente. Elle n'est pas encore calculée ni prélevée dans cette version de démarrage.</p>
+  </section>
+</main>
+<footer>© GLOBISHOP — Marketplace internationale</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDyxKhBsT2aFog1kAFAmcwMloQGKnK6rz6Q",
+  authDomain: "globishop-6c5d6.firebaseapp.com",
+  projectId: "globishop-6c5d6",
+  storageBucket: "globishop-6c5d6.firebasestorage.app",
+  messagingSenderId: "904765784664",
+  appId: "1:904765784664:web:d433dd7cd5a7159f1bc02d",
+  measurementId: "G-VF4HY0R22H"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+let currentUser = null;
+let products = [];
+let cart = [];
+
+const $ = id => document.getElementById(id);
+const status = (id, message) => $(id).textContent = message;
+function escapeHTML(value='') {
+  return String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function renderProducts() {
+  const term = $('searchInput').value.trim().toLowerCase();
+  const filtered = products.filter(p => [p.name,p.description,p.category,p.storeName].join(' ').toLowerCase().includes(term));
+  $('products').innerHTML = filtered.map(p => `
+    <article class="product">
+      <img src="${escapeHTML(p.imageUrl || '')}" alt="" onerror="this.style.display='none'">
+      <h3>${escapeHTML(p.name || 'Produit')}</h3>
+      <p>${escapeHTML(p.description || '')}</p>
+      <p class="muted">${escapeHTML(p.category || 'Autre')} · ${p.type === 'physical' ? 'Physique' : 'Numérique'}</p>
+      <p class="price">${Number(p.price || 0).toLocaleString()} ${escapeHTML(p.currency || 'FCFA')}</p>
+      <p class="muted">Boutique : ${escapeHTML(p.storeName || 'Vendeur')}</p>
+      <button onclick="addToCart('${p.id}')">Ajouter au panier</button>
+    </article>`).join('');
+  status('productStatus', filtered.length ? filtered.length + ' produit(s) affiché(s).' : 'Aucun produit publié pour le moment.');
+}
+window.addToCart = id => {
+  const p = products.find(x => x.id === id);
+  if (!p) return;
+  cart.push(p); $('cartCount').textContent = cart.length;
+  status('orderStatus', 'Produit ajouté au panier.');
+};
+function renderCart() {
+  $('cartPanel').classList.remove('hidden');
+  $('cartItems').innerHTML = cart.length ? cart.map((p,i)=>`<p>${escapeHTML(p.name)} — ${Number(p.price||0).toLocaleString()} ${escapeHTML(p.currency||'FCFA')} <button class="secondary" onclick="removeCart(${i})">Retirer</button></p>`).join('') : '<p>Votre panier est vide.</p>';
+}
+window.removeCart = i => { cart.splice(i,1); $('cartCount').textContent=cart.length; renderCart(); };
+$('cartButton').addEventListener('click', renderCart);
+$('searchButton').addEventListener('click', renderProducts);
+$('searchInput').addEventListener('input', renderProducts);
+
+$('signupButton').addEventListener('click', async () => {
+  try {
+    const cred = await auth.createUserWithEmailAndPassword($('authEmail').value.trim(), $('authPassword').value);
+    await db.collection('users').doc(cred.user.uid).set({email:cred.user.email, role:'buyer_seller', createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+    status('authStatus','Compte créé : '+cred.user.email);
+  } catch(e) { status('authStatus','Erreur : '+e.message); }
+});
+$('loginButton').addEventListener('click', async () => {
+  try { const c=await auth.signInWithEmailAndPassword($('authEmail').value.trim(),$('authPassword').value); status('authStatus','Connecté : '+c.user.email); }
+  catch(e) { status('authStatus','Erreur : '+e.message); }
+});
+$('logoutButton').addEventListener('click', async () => { await auth.signOut(); status('authStatus','Déconnecté.'); });
+auth.onAuthStateChanged(user => {
+  currentUser=user;
+  status('authStatus', user ? 'Connecté : '+user.email : 'Vous n’êtes pas connecté.');
+});
+$('publishButton').addEventListener('click', async () => {
+  if (!currentUser) return status('publishStatus','Connectez-vous avant de publier.');
+  const name=$('productName').value.trim(), price=Number($('productPrice').value);
+  if (!name || !Number.isFinite(price) || price < 0) return status('publishStatus','Ajoutez un nom et un prix valide.');
+  try {
+    await db.collection('products').add({
+      name, price, currency:$('productCurrency').value, category:$('productCategory').value.trim(),
+      type:$('productType').value, storeName:$('storeName').value.trim(),
+      description:$('productDescription').value.trim(), imageUrl:$('productImage').value.trim(),
+      digitalUrl:$('productFile').value.trim(), sellerId:currentUser.uid,
+      status:'published', createdAt:firebase.firestore.FieldValue.serverTimestamp()
+    });
+    status('publishStatus','Produit publié.'); $('productName').value='';
+  } catch(e) { status('publishStatus','Erreur : '+e.message); }
+});
+$('orderButton').addEventListener('click', async () => {
+  if (!currentUser) return status('orderStatus','Connectez-vous pour créer une commande de test.');
+  if (!cart.length) return status('orderStatus','Votre panier est vide.');
+  try {
+    const total=cart.reduce((s,p)=>s+Number(p.price||0),0);
+    const ref=await db.collection('orders').add({
+      buyerId:currentUser.uid, productIds:cart.map(p=>p.id), total,
+      currency:cart[0].currency||'FCFA', paymentMethod:$('paymentChoice').value,
+      paymentStatus:'test_not_paid', orderStatus:'test_created',
+      country:$('buyerCountry').value.trim(), address:$('buyerAddress').value.trim(),
+      createdAt:firebase.firestore.FieldValue.serverTimestamp()
+    });
+    cart=[]; $('cartCount').textContent='0'; renderCart();
+    status('orderStatus','Commande de test créée : '+ref.id+'. Aucun paiement effectué.');
+  } catch(e) { status('orderStatus','Erreur : '+e.message); }
+});
+db.collection('products').where('status','==','published').onSnapshot(snapshot => {
+  products=snapshot.docs.map(d=>({id:d.id,...d.data()})); renderProducts();
+}, error => status('productStatus','Impossible de charger les produits : '+error.message));
+$('language').addEventListener('change', e => {
+  const lang=e.target.value;
+  if (lang==='fr') return;
+  const url='https://translate.google.com/translate?sl=auto&tl='+encodeURIComponent(lang)+'&u='+encodeURIComponent(location.href);
+  window.open(url,'_blank');
+});
+</script>
+</body>
+  </html>
+  
